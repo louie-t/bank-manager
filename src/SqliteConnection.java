@@ -7,7 +7,7 @@ public class SqliteConnection {
 	public static Connection dbConnector() {
 		try {
 			Class.forName("org.sqlite.JDBC");
-			String path = "UserData.sqlite";
+			String path = "UserData.db";
 			Connection dbConnection = DriverManager.getConnection("jdbc:sqlite:" + path);
 			JOptionPane.showMessageDialog(null,  "Connection Successful");
 			return dbConnection;
