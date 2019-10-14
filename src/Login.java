@@ -14,6 +14,8 @@ public class Login {
 	private JFrame frame;
 	private JTextField textFieldUsername;
 	private JPasswordField passwordField;
+	
+	public static String currentUsername;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -64,7 +66,8 @@ public class Login {
 				try{
 				    String query = "select * from UserData where username=? and password=?";
 				    PreparedStatement pst =  dbConnection.prepareStatement(query);
-				    pst.setString(1, textFieldUsername.getText());
+				    currentUsername = textFieldUsername.getText();
+				    pst.setString(1, currentUsername);
 				    pst.setString(2, String.valueOf(passwordField.getPassword()));
 				    
 				    ResultSet rs=pst.executeQuery();
@@ -74,6 +77,9 @@ public class Login {
 				    }
 				    if(count == 1){ 	
 				        JOptionPane.showMessageDialog(null, "Username and password is correct");
+				        frame.dispose();
+				        UserData userData = new UserData();
+				        userData.setVisible(true);
 				    }
 				    else if (count > 1){
 				        JOptionPane.showMessageDialog(null, "Duplicate Username and password");
