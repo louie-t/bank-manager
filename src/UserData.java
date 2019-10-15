@@ -12,6 +12,8 @@ import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.SwingConstants;
+import java.awt.Font;
 
 public class UserData extends JFrame {
 	
@@ -44,6 +46,13 @@ public class UserData extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
+		
+		JLabel lblUsername = new JLabel("Hi " + Login.getCurrentUsername() +"!");
+		lblUsername.setFont(new Font("Times New Roman", Font.BOLD, 15));
+		lblUsername.setHorizontalAlignment(SwingConstants.CENTER);
+		lblUsername.setBounds(0, 11, 434, 60);
+		contentPane.add(lblUsername);
+		
 		JButton btnLogout = new JButton("Logout");
 		btnLogout.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -59,9 +68,9 @@ public class UserData extends JFrame {
 		btnGetBalance.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
-					String query ="Select * from UserData where username = (?)";
+					String query ="SELECT * FROM UserData WHERE username = (?)";
 					PreparedStatement pst = dbConnection.prepareStatement(query);
-					pst.setString(1, Login.currentUsername);
+					pst.setString(1, Login.getCurrentUsername());
 	
 					ResultSet rs = pst.executeQuery();
 					
@@ -70,7 +79,7 @@ public class UserData extends JFrame {
 				        balance = rs.getString(6);
 				    }
 					
-					JOptionPane.showMessageDialog(null, "Your current balance is " + balance);
+					JOptionPane.showMessageDialog(null, "Your current balance is $" + balance + ".");
 					
 					rs.close();
 					pst.close();
@@ -81,24 +90,110 @@ public class UserData extends JFrame {
 				
 			}
 		});
-		btnGetBalance.setBounds(10, 128, 100, 23);
+		btnGetBalance.setBounds(10, 128, 120, 23);
 		contentPane.add(btnGetBalance);
 		
 		JButton btnWithdraw = new JButton("Withdraw");
-		btnWithdraw.setBounds(10, 60, 100, 23);
+		btnWithdraw.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				try {
+					String query ="SELECT * FROM UserData WHERE username = (?)";
+					PreparedStatement pst = dbConnection.prepareStatement(query);
+					pst.setString(1, Login.getCurrentUsername());
+	
+					ResultSet rs = pst.executeQuery();
+					
+					String balance = null;
+					while (rs.next()) {
+				        balance = rs.getString(6);
+				    }
+					
+					rs.close();
+					pst.close();
+					
+					int intAmount = Integer.parseInt(textFieldAmount.getText());
+					int intBalance = Integer.parseInt(balance);
+					
+					if (intBalance < intAmount) {
+						intAmount = 0;
+						JOptionPane.showMessageDialog(null, "The amount you withdrawn is greater than you current balance. Try again.");
+					}
+					else {
+						intBalance -= intAmount;
+						
+						balance = Integer.toString(intBalance);
+						String amount = Integer.toString(intAmount);
+						
+						String query2 ="UPDATE UserData SET balance = (?) WHERE username = (?)";
+						PreparedStatement pst2 = dbConnection.prepareStatement(query2);
+						pst2.setString(1, balance);
+						pst2.setString(2, Login.getCurrentUsername());
+						pst2.execute();
+						
+						JOptionPane.showMessageDialog(null, "The amount you withdrawn is $" + amount + ".\nYour new balance is $" + balance + ".");
+						pst2.close();
+					}		
+				}catch(Exception e) {
+					e.printStackTrace();
+				}
+				
+			}
+		});
+		btnWithdraw.setBounds(10, 60, 120, 23);
 		contentPane.add(btnWithdraw);
 		
 		JButton btnDeposit = new JButton("Deposit");
-		btnDeposit.setBounds(10, 94, 100, 23);
+		btnDeposit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				try {
+					String query ="SELECT * FROM UserData WHERE username = (?)";
+					PreparedStatement pst = dbConnection.prepareStatement(query);
+					pst.setString(1, Login.getCurrentUsername());
+	
+					ResultSet rs = pst.executeQuery();
+					
+					String balance = null;
+					while (rs.next()) {
+				        balance = rs.getString(6);
+				    }
+					
+					rs.close();
+					pst.close();
+					
+					int intAmount = Integer.parseInt(textFieldAmount.getText());
+					int intBalance = Integer.parseInt(balance);
+					intBalance += intAmount;
+					balance = Integer.toString(intBalance);
+					String amount = Integer.toString(intAmount);
+					
+					String query2 ="UPDATE UserData SET balance = (?) WHERE username = (?)";
+					PreparedStatement pst2 = dbConnection.prepareStatement(query2);
+					pst2.setString(1, balance);
+					pst2.setString(2, Login.getCurrentUsername());
+					pst2.execute();
+					
+					JOptionPane.showMessageDialog(null, "The amount you deposited is $" + amount + ".\nYour new balance is $" + balance + ".");
+					pst2.close();
+							
+				}catch(Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		btnDeposit.setBounds(10, 94, 120, 23);
 		contentPane.add(btnDeposit);
 		
 		textFieldAmount = new JTextField();
-		textFieldAmount.setBounds(122, 160, 96, 20);
+		textFieldAmount.setBounds(147, 160, 96, 20);
 		contentPane.add(textFieldAmount);
 		textFieldAmount.setColumns(10);
 		
 		JLabel lblAmount = new JLabel("Amount");
-		lblAmount.setBounds(47, 163, 48, 14);
+		lblAmount.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblAmount.setHorizontalAlignment(SwingConstants.CENTER);
+		lblAmount.setBounds(10, 162, 120, 17);
 		contentPane.add(lblAmount);
+		
+		
 	}
 }

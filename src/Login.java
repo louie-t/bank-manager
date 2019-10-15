@@ -15,7 +15,11 @@ public class Login {
 	private JTextField textFieldUsername;
 	private JPasswordField passwordField;
 	
-	public static String currentUsername;
+	private static String currentUsername;
+	
+	public static String getCurrentUsername() {
+		return Login.currentUsername;
+	}
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -64,7 +68,7 @@ public class Login {
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				try{
-				    String query = "select * from UserData where username=? and password=?";
+				    String query = "SELECT * FROM UserData WHERE username=? AND password=?";
 				    PreparedStatement pst =  dbConnection.prepareStatement(query);
 				    currentUsername = textFieldUsername.getText();
 				    pst.setString(1, currentUsername);
@@ -76,16 +80,16 @@ public class Login {
 				        count = count + 1;
 				    }
 				    if(count == 1){ 	
-				        JOptionPane.showMessageDialog(null, "Username and password is correct");
+				        JOptionPane.showMessageDialog(null, "Username and password is correct.");
 				        frame.dispose();
 				        UserData userData = new UserData();
 				        userData.setVisible(true);
 				    }
 				    else if (count > 1){
-				        JOptionPane.showMessageDialog(null, "Duplicate Username and password");
+				        JOptionPane.showMessageDialog(null, "Duplicate Username and password.");
 				    }
 				    else{
-				        JOptionPane.showMessageDialog(null, "Username and password is not correct. Try Again..");
+				        JOptionPane.showMessageDialog(null, "Username or password is incorrect. Try Again...");
 				    }
 				    
 				    rs.close();
