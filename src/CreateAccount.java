@@ -49,7 +49,7 @@ public class CreateAccount extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JButton btnGoBack = new JButton("Go Back");
+		JButton btnGoBack = new JButton("Go to login screen");
 		btnGoBack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				contentPane.setVisible(false);
