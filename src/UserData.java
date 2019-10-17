@@ -1,23 +1,17 @@
-
+import java.sql.*;
 
 import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.JButton;
 import java.awt.event.ActionListener;
-import java.sql.*;
 import java.awt.event.ActionEvent;
-import javax.swing.JTextField;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.SwingConstants;
 import java.awt.Font;
+
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 
 public class UserData extends JFrame {
 	
 	Connection dbConnection = null;
+	
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField textFieldAmount;
@@ -34,8 +28,7 @@ public class UserData extends JFrame {
 			}
 		});
 	}
-
-
+	
 	public UserData() {
 		dbConnection = SqliteConnection.dbConnector();
 		
@@ -68,7 +61,7 @@ public class UserData extends JFrame {
 		btnGetBalance.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
-					String query ="SELECT * FROM UserData WHERE username = (?)";
+					String query = "SELECT * FROM userdata WHERE username = ?";
 					PreparedStatement pst = dbConnection.prepareStatement(query);
 					pst.setString(1, Login.getCurrentUsername());
 	
@@ -97,7 +90,7 @@ public class UserData extends JFrame {
 		btnWithdraw.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
-					String query ="SELECT * FROM UserData WHERE username = (?)";
+					String query = "SELECT * FROM userdata WHERE username = ?";
 					PreparedStatement pst = dbConnection.prepareStatement(query);
 					pst.setString(1, Login.getCurrentUsername());
 	
@@ -124,7 +117,7 @@ public class UserData extends JFrame {
 						balance = Integer.toString(intBalance);
 						String amount = Integer.toString(intAmount);
 						
-						String query2 ="UPDATE UserData SET balance = (?) WHERE username = (?)";
+						String query2 = "UPDATE userdata SET balance = ? WHERE username = ?";
 						PreparedStatement pst2 = dbConnection.prepareStatement(query2);
 						pst2.setString(1, balance);
 						pst2.setString(2, Login.getCurrentUsername());
@@ -146,7 +139,7 @@ public class UserData extends JFrame {
 		btnDeposit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
-					String query ="SELECT * FROM UserData WHERE username = (?)";
+					String query ="SELECT * FROM userdata WHERE username = ?";
 					PreparedStatement pst = dbConnection.prepareStatement(query);
 					pst.setString(1, Login.getCurrentUsername());
 	
@@ -166,7 +159,7 @@ public class UserData extends JFrame {
 					balance = Integer.toString(intBalance);
 					String amount = Integer.toString(intAmount);
 					
-					String query2 ="UPDATE UserData SET balance = (?) WHERE username = (?)";
+					String query2 ="UPDATE userdata SET balance = (?) WHERE username = (?)";
 					PreparedStatement pst2 = dbConnection.prepareStatement(query2);
 					pst2.setString(1, balance);
 					pst2.setString(2, Login.getCurrentUsername());

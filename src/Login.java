@@ -1,16 +1,16 @@
-import java.awt.EventQueue;
 import java.sql.*;
-import javax.swing.*;
 
-import javax.swing.JFrame;
+import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
+import javax.swing.*;
+import javax.swing.JFrame;
+
 public class Login {
 	
 	Connection dbConnection = null;
-
 	private JFrame frame;
 	private JTextField textFieldUsername;
 	private JPasswordField passwordField;
@@ -48,27 +48,27 @@ public class Login {
 		frame.getContentPane().setLayout(null);
 		
 		JLabel lblUsername = new JLabel("Username");
-		lblUsername.setBounds(108, 84, 64, 14);
+		lblUsername.setBounds(70, 84, 64, 14);
 		frame.getContentPane().add(lblUsername);
 		
 		JLabel lblPassword = new JLabel("Password");
-		lblPassword.setBounds(108, 146, 64, 14);
+		lblPassword.setBounds(70, 115, 64, 14);
 		frame.getContentPane().add(lblPassword);
 		
 		textFieldUsername = new JTextField();
-		textFieldUsername.setBounds(194, 81, 96, 20);
+		textFieldUsername.setBounds(180, 81, 150, 20);
 		frame.getContentPane().add(textFieldUsername);
 		textFieldUsername.setColumns(10);
 		
 		passwordField = new JPasswordField();
-		passwordField.setBounds(194, 143, 96, 20);
+		passwordField.setBounds(180, 112, 150, 20);
 		frame.getContentPane().add(passwordField);
 		
 		JButton btnLogin = new JButton("Login");
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				try{
-				    String query = "SELECT * FROM UserData WHERE username=? AND password=?";
+				    String query = "SELECT * FROM userdata WHERE username = ? AND password = ?";
 				    PreparedStatement pst =  dbConnection.prepareStatement(query);
 				    currentUsername = textFieldUsername.getText();
 				    pst.setString(1, currentUsername);
@@ -100,13 +100,29 @@ public class Login {
 				
 			}
 		});
-		btnLogin.setBounds(194, 191, 96, 23);
+		btnLogin.setBounds(180, 156, 150, 23);
 		frame.getContentPane().add(btnLogin);
 		
 		JLabel lblBanking = new JLabel("Banking");
 		lblBanking.setFont(new Font("Tahoma", Font.BOLD, 14));
 		lblBanking.setHorizontalAlignment(SwingConstants.CENTER);
-		lblBanking.setBounds(108, 29, 182, 29);
+		lblBanking.setBounds(70, 29, 262, 29);
 		frame.getContentPane().add(lblBanking);
+		
+		JButton btnCreateAccount = new JButton("Create Account");
+		btnCreateAccount.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				try {
+			        frame.dispose();
+			        CreateAccount createAccount = new CreateAccount();
+			        createAccount.setVisible(true);
+				}catch(Exception e){
+				    JOptionPane.showMessageDialog(null, e);
+				}
+				
+			}
+		});
+		btnCreateAccount.setBounds(180, 204, 150, 23);
+		frame.getContentPane().add(btnCreateAccount);
 	}
 }
